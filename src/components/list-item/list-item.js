@@ -7,28 +7,25 @@ class ListItem extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.keys = Object.keys(props.data)
-        this.values = Object.values(props.data);
-
+        
         this.state = {
             editMode: false,
-            value: this.values.join(' '),
-            editValue: this.values.join(' / ')
+            data: props.data,
+            editValue: Object.values(props.data).join(' / ')
         }
+        this.typeText = this.typeText.bind(this);
+        this.updateData = this.updateData.bind(this)
+        this.editRecord = this.editRecord.bind(this);
 
-        this.edit = this.edit.bind(this);
-        this.save = this.save.bind(this);
     }
 
     swapEditMode = () => {
         this.setState(state => ({
             editMode: !state.editMode,
-            editValues: this.values.join(' / ')
         }));
     }
 
-    save(event) {
+    editRecord(event) {
         event.preventDefault();
 
         const [login, email, password] = this.state.editValue.split(' / ');
@@ -41,12 +38,22 @@ class ListItem extends React.Component {
             }
         }
         const body = JSON.stringify(data);
-        this.props.onEdit(body, this.props.id);
+        this.props.onEdit(body, this.props.id, this.updateData);
         this.swapEditMode();
     }
 
-    edit(event) {
-        this.setState({editValue: event.target.value});
+    typeText(event) {
+        this.setState({
+            editValue: event.target.value
+        });
+    }
+
+    updateData(data) {
+        console.log(data);
+        this.setState({
+            data: data,
+            editValue: Object.values(data).join(' / ')
+        })
     }
 
     render() {
@@ -67,7 +74,7 @@ class ListItem extends React.Component {
                 <Input
                     type="text"
                     placeholder="Введите E-Mail и пароль через пробел"
-                    onChange={this.edit}
+                    onChange={this.typeText}
                     value={this.state.editValue}
                 />
                 <div className="d-flex justify-content-center align-items-center">
@@ -79,7 +86,7 @@ class ListItem extends React.Component {
                     </button>
                     <button
                         className="btn-check btn-sm"
-                        onClick={this.save}
+                        onClick={this.editRecord}
                     >
                         <i className="fa fa-check"> </i>
                     </button>
@@ -90,10 +97,10 @@ class ListItem extends React.Component {
 
 
     itemView = () => {
-        const text = this.keys.map((key, i) =>
-            <>
-                <Badge color="light" pill>{key}</Badge>{this.values[i]}{"\t"}
-            </>)
+        const text = Object.entries(this.state.data).map(
+            ([key, value]) =>
+                <><Badge color="light" pill>{key}</Badge>{value}</>
+        );
         return (
             <>
                 <span className="app-list-item-label">

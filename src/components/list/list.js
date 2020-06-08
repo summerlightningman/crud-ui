@@ -48,19 +48,21 @@ class List extends React.Component {
             )
     }
 
-    async editRecord(body, id) {
-        try {
-            await fetch(`${url}/${id}`, {
-                method: 'POST',
-                body: body,
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            await this.getRecords();
-        } catch (err) {
-            alert('Ошибка в редактировании данных')
+    async editRecord(body, id, updateMethod) {
+        const response = await fetch(`${url}/${id}`, {
+            method: 'POST',
+            body: body,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if (response.ok){
+            const data = await response.json();
+            updateMethod(data.data)
         }
+
+
+
     }
 
     toHtml(record, index) {
