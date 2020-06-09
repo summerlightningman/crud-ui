@@ -1,7 +1,7 @@
 import React from 'react';
 import ListItem from "../list-item";
 import ListItemAdd from "../list-item-add";
-import {ListGroup, Button, Card, CardBody, Collapse} from 'reactstrap';
+import {Button, Card, CardBody, Collapse, ListGroup} from 'reactstrap';
 import {url} from '../../urls'
 
 class List extends React.Component {
@@ -11,17 +11,19 @@ class List extends React.Component {
             records: [],
             hintShowed: false,
         }
+
         this.getRecords();
 
-        this.delete = this.delete.bind(this);
+        this.deleteRecord = this.deleteRecord.bind(this);
         this.addRecord = this.addRecord.bind(this);
-        this.toHtml = this.toHtml.bind(this);
         this.editRecord = this.editRecord.bind(this);
     }
 
 
-    async delete(id) {
-        const result = await fetch(`${url}/${id}`, {method: 'DELETE'})
+    async deleteRecord(id) {
+        const result = await fetch(`${url}/${id}`, {
+            method: 'DELETE'
+        });
         if (result.ok)
             await this.getRecords();
     }
@@ -39,42 +41,32 @@ class List extends React.Component {
     }
 
     async getRecords() {
-        const result = await fetch(url);
-        result.json()
-            .then(list => this.setState(
-                {
+        await fetch(url)
+            .then(result =>
+                result.json()
+            ).then(list =>
+                this.setState({
                     records: list
                 })
             )
+        this.render();
     }
 
     async editRecord(body, id, updateMethod) {
-        const response = await fetch(`${url}/${id}`, {
+        const result = await fetch(`${url}/${id}`, {
             method: 'POST',
             body: body,
             headers: {
                 'Content-Type': 'application/json',
             }
         });
-        if (response.ok){
-            const data = await response.json();
+        if (result.ok) {
+            const data = await result.json();
             updateMethod(data.data)
         }
 
-
-
     }
 
-    toHtml(record, index) {
-        let data = 'data' in record ? record.data : Object();
-        return <ListItem
-            data={data}
-            key={index}
-            id={record['_id']}
-            onEdit={this.editRecord}
-            onDelete={this.delete}
-        />
-    }
 
     showHints() {
         const toggle = () => {
@@ -108,8 +100,20 @@ class List extends React.Component {
         return (
             <div>
                 <ListGroup className="app-first">
-                    {this.state.records.map(this.toHtml)}
-                    <ListItemAdd onAdd={this.addRecord} key={-1}/>
+                    {this.state.records.map(
+                        ({_id: id, data: data}, index) =>
+                            <ListItem
+                                key={index}
+                                id={id || '-1'}
+                                data={data || Object()}
+                                editMethod={this.editRecord}
+                                deleteMethod={() => this.deleteRecord(id)}
+                            />
+                    )}
+                    <ListItemAdd
+                        addMethod={this.addRecord}
+                        key={-1}
+                    />
                 </ListGroup>
                 <hr/>
                 {this.showHints()}

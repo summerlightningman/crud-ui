@@ -7,22 +7,26 @@ class ListItem extends React.Component {
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
             editMode: false,
             data: props.data,
             editValue: Object.values(props.data).join(' / ')
         }
-        this.typeText = this.typeText.bind(this);
-        this.updateData = this.updateData.bind(this)
-        this.editRecord = this.editRecord.bind(this);
 
+        this.typeText = this.typeText.bind(this);
+        this.updateData = this.updateData.bind(this);
+        this.editRecord = this.editRecord.bind(this);
     }
 
     swapEditMode = () => {
         this.setState(state => ({
             editMode: !state.editMode,
         }));
+    }
+
+    deleteRecord = () => {
+        this.props.deleteMethod();
     }
 
     editRecord(event) {
@@ -38,7 +42,7 @@ class ListItem extends React.Component {
             }
         }
         const body = JSON.stringify(data);
-        this.props.onEdit(body, this.props.id, this.updateData);
+        this.props.editMethod(body, this.props.id, this.updateData);
         this.swapEditMode();
     }
 
@@ -49,7 +53,6 @@ class ListItem extends React.Component {
     }
 
     updateData(data) {
-        console.log(data);
         this.setState({
             data: data,
             editValue: Object.values(data).join(' / ')
@@ -95,7 +98,6 @@ class ListItem extends React.Component {
         )
     }
 
-
     itemView = () => {
         const text = Object.entries(this.state.data).map(
             ([key, value]) =>
@@ -110,7 +112,7 @@ class ListItem extends React.Component {
                     <button className="btn-edit btn-sm" onClick={this.swapEditMode}>
                         <i className="fa fa-edit"> </i>
                     </button>
-                    <button className="btn-trash btn-sm" onClick={() => this.props.onDelete(this.props.id)}>
+                    <button className="btn-trash btn-sm" onClick={this.deleteRecord}>
                         <i className="fa fa-trash-o"> </i>
                     </button>
                 </div>

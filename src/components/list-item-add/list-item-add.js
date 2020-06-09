@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Input, InputGroup, InputGroupAddon, InputGroupText, Alert, Container, Col, Row} from 'reactstrap'
+import {Button, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row} from 'reactstrap'
 
 
 class ListItemAdd extends React.Component {
@@ -9,21 +9,19 @@ class ListItemAdd extends React.Component {
             email: '',
             login: '',
             password: '',
-            hasInputError: false
         }
     }
 
-    edit(field, event) {
+    typeText(field, event) {
         this.setState({
             [field]: event.target.value
         })
     }
 
 
-    submit(event) {
+    addRecord(event) {
         event.preventDefault();
         const {login, password, email} = this.state;
-        
         const data = {
             data: {
                 login,
@@ -32,19 +30,8 @@ class ListItemAdd extends React.Component {
             }
         }
         const body = JSON.stringify(data);
-        console.log(body);
-        this.props.onAdd(body);
+        this.props.addMethod(body);
         this.clearFields();
-    }
-
-    showErrorMessages() {
-        if (this.state.hasInputError) {
-            return <Alert color="danger">
-                Неверный формат ввода
-            </Alert>
-        } else {
-            return false;
-        }
     }
 
     clearFields() {
@@ -57,10 +44,16 @@ class ListItemAdd extends React.Component {
         )
     }
 
+    onKeyUp = (e) => {
+        if (e.keyCode === 13) {
+            this.addRecord()
+        }
+    }
+
     render() {
         return (
             <div>
-                <form onSubmit={e => this.submit(e)}>
+                <form onSubmit={e => this.addRecord(e)}>
                     <Container fluid={true}>
                         <Row>
                             <Col xs="2" sm="3" md="3">
@@ -68,34 +61,42 @@ class ListItemAdd extends React.Component {
                                     <InputGroupAddon addonType="prepend">
                                         <InputGroupText>Логин</InputGroupText>
                                     </InputGroupAddon>
+
                                     <Input
-                                        onChange={e => this.edit('login', e)}
+                                        onChange={e => this.typeText('login', e)}
                                         value={this.state.login}
+                                        onkeyup={this.onKeyUp}
                                     />
                                 </InputGroup>
                             </Col>
+
                             <Col xs="2" sm="3" md="3">
                                 <InputGroup>
                                     <InputGroupAddon addonType="prepend">
                                         <InputGroupText>E-Mail</InputGroupText>
                                     </InputGroupAddon>
+
                                     <Input
-                                        onChange={e => this.edit('email', e)}
+                                        onChange={e => this.typeText('email', e)}
                                         value={this.state.email}
+                                        onkeyup={this.onKeyUp}
                                     />
                                 </InputGroup>
                             </Col>
+
                             <Col xs="2" sm="3" md="3">
                                 <InputGroup>
                                     <InputGroupAddon addonType="prepend">
                                         <InputGroupText>Пароль</InputGroupText>
                                     </InputGroupAddon>
                                     <Input
-                                        onChange={e => this.edit('password', e)}
+                                        onChange={e => this.typeText('password', e)}
                                         value={this.state.password}
+                                        onkeyup={this.onKeyUp}
                                     />
                                 </InputGroup>
                             </Col>
+
                             <Col xs="1" sm="3" md="3">
                                 <Button
                                     type="submit"
@@ -103,10 +104,10 @@ class ListItemAdd extends React.Component {
                                     color="secondary"
                                 >Добавить</Button>
                             </Col>
+
                         </Row>
                     </Container>
                 </form>
-                {this.showErrorMessages()}
             </div>
         )
     }
