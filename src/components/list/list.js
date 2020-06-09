@@ -98,7 +98,7 @@ class List extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <ListGroup className="app-first">
+                <ListGroup>
                     {this.state.records.map(
                         record =>
                             <ListItem
