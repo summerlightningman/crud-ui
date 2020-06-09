@@ -36,8 +36,8 @@ class ListItem extends React.Component {
                 password
             }
         }
-        const body = JSON.stringify(data);
-        this.props.editMethod(body, this.updateData);
+        // const body = JSON.stringify(data);
+        this.props.editMethod(data, this.updateData);
         this.swapEditMode();
     }
 

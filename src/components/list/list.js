@@ -41,7 +41,8 @@ class List extends React.Component {
     }
 
     editRecord = (id) => {
-        return async (body, updateMethod) => {
+        return async (data, updateMethod) => {
+            const body = JSON.stringify(data);
             const result = await fetch(`${url}/${id}`, {
                 method: 'POST',
                 body: body,
@@ -50,7 +51,6 @@ class List extends React.Component {
                 }
             });
             if (result.ok) {
-                const data = await result.json();
                 updateMethod(data.data)
             }
         }
