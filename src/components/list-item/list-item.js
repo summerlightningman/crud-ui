@@ -50,8 +50,8 @@ class ListItem extends React.Component {
     }
 
     editForm = () => {
-        const inputs = Object.entries(this.state.data).map(
-            ([key, value], index) =>
+        const inputs = Object.keys(this.state.data).map(
+            (key, index) =>
                 <div key={index}>
                     <Badge color="light" pill>
                         {key}
