@@ -12,10 +12,11 @@ class ListItemAdd extends React.Component {
         }
     }
 
-    typeText = (field, event) => {
-        this.setState({
-            [field]: event.target.value
-        })
+    typeText = (field) => {
+        return (event) =>
+            this.setState({
+                [field]: event.target.value
+            })
     }
 
 
@@ -53,7 +54,7 @@ class ListItemAdd extends React.Component {
                     <Col>
                         <Input
                             placeholder="Логин"
-                            onChange={e => this.typeText('login', e)}
+                            onChange={this.typeText('login')}
                             value={this.state.login}
                         />
                     </Col>
@@ -61,7 +62,7 @@ class ListItemAdd extends React.Component {
                     <Col>
                         <Input
                             placeholder="E-Mail"
-                            onChange={e => this.typeText('email', e)}
+                            onChange={this.typeText('email')}
                             value={this.state.email}
                         />
                     </Col>
@@ -69,7 +70,7 @@ class ListItemAdd extends React.Component {
                     <Col>
                         <Input
                             placeholder="Пароль"
-                            onChange={e => this.typeText('password', e)}
+                            onChange={this.typeText('password')}
                             value={this.state.password}
                         />
                     </Col>
