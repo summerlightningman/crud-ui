@@ -23,24 +23,24 @@ class List extends React.Component {
             }
         });
         if (result.ok) {
-            await this.getRecords();
+            this.getRecords();
             return await result.json()
         }
     }
 
-    getRecords = async () => {
-        await fetch(url)
+    getRecords = () => {
+        fetch(url)
             .then(result =>
                 result.json()
             ).then(list =>
-                this.setState({
-                    records: list
-                })
-            )
+            this.setState({
+                records: list
+            })
+        )
     }
 
     editRecord = (id) => {
-        return async (data, updateMethod) => {
+        return async (data, updateComponent) => {
             const body = JSON.stringify(data);
             const result = await fetch(`${url}/${id}`, {
                 method: 'POST',
@@ -49,9 +49,8 @@ class List extends React.Component {
                     'Content-Type': 'application/json',
                 }
             });
-            if (result.ok) {
-                updateMethod(data.data)
-            }
+            if (result.ok)
+                updateComponent(data.data)
         }
     }
 
@@ -61,7 +60,7 @@ class List extends React.Component {
                 method: 'DELETE'
             });
             if (result.ok)
-                await this.getRecords();
+                this.getRecords();
         }
     }
 
