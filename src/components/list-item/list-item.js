@@ -17,7 +17,6 @@ class ListItem extends React.Component {
     updateComponent = (data) => {
         this.setState({
             data: data,
-            editValue: Object.values(data).join(' / ')
         })
     }
 

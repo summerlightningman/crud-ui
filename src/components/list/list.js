@@ -82,7 +82,6 @@ class List extends React.Component {
                         addMethod={this.addRecord}
                     />
                 </ListGroup>
-                <hr/>
             </React.Fragment>
         )
     }
