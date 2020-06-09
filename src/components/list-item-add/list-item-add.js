@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row} from 'reactstrap'
+import {Button, Col, Input, Row} from 'reactstrap'
 
 
 class ListItemAdd extends React.Component {
@@ -48,62 +48,45 @@ class ListItemAdd extends React.Component {
 
     render() {
         return (
-            <div>
-                <form onSubmit={e => this.addRecord(e)}>
-                    <Container fluid={true}>
-                        <Row>
-                            <Col xs="2" sm="3" md="3">
-                                <InputGroup>
-                                    <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>Логин</InputGroupText>
-                                    </InputGroupAddon>
+            <form onSubmit={e => this.addRecord(e)} style={{marginTop: '10px'}}>
+                <Row>
+                    <Col>
+                        <Input
+                            placeholder="Логин"
+                            onChange={e => this.typeText('login', e)}
+                            value={this.state.login}
+                        />
+                    </Col>
 
-                                    <Input
-                                        onChange={e => this.typeText('login', e)}
-                                        value={this.state.login}
-                                    />
-                                </InputGroup>
-                            </Col>
+                    <Col>
+                        <Input
+                            placeholder="E-Mail"
+                            onChange={e => this.typeText('email', e)}
+                            value={this.state.email}
+                        />
+                    </Col>
 
-                            <Col xs="2" sm="3" md="3">
-                                <InputGroup>
-                                    <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>E-Mail</InputGroupText>
-                                    </InputGroupAddon>
+                    <Col>
+                        <Input
+                            placeholder="Пароль"
+                            onChange={e => this.typeText('password', e)}
+                            value={this.state.password}
+                        />
+                    </Col>
 
-                                    <Input
-                                        onChange={e => this.typeText('email', e)}
-                                        value={this.state.email}
-                                    />
-                                </InputGroup>
-                            </Col>
+                    <Col xs={2}>
+                        <Button
+                            type="submit"
+                            outline
+                            color="secondary"
+                        >
+                            Добавить
+                        </Button>
+                    </Col>
 
-                            <Col xs="2" sm="3" md="3">
-                                <InputGroup>
-                                    <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>Пароль</InputGroupText>
-                                    </InputGroupAddon>
-                                    <Input
-                                        onChange={e => this.typeText('password', e)}
-                                        value={this.state.password}
-                                    />
-                                </InputGroup>
-                            </Col>
+                </Row>
+            </form>
 
-                            <Col xs="1" sm="3" md="3">
-                                <Button
-                                    type="submit"
-                                    outline
-                                    color="secondary"
-                                >
-                                    Добавить
-                                </Button>
-                            </Col>
-
-                        </Row>
-                    </Container>
-                </form>
-            </div>
         )
     }
 }
