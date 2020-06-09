@@ -12,7 +12,7 @@ class ListItemAdd extends React.Component {
         }
     }
 
-    typeText(field, event) {
+    typeText = (field, event) => {
         this.setState({
             [field]: event.target.value
         })
@@ -20,7 +20,8 @@ class ListItemAdd extends React.Component {
 
 
     addRecord(event) {
-        event.preventDefault();
+        if (event)
+            event.preventDefault();
         const {login, password, email} = this.state;
         const data = {
             data: {
@@ -44,11 +45,6 @@ class ListItemAdd extends React.Component {
         )
     }
 
-    onKeyUp = (e) => {
-        if (e.keyCode === 13) {
-            this.addRecord()
-        }
-    }
 
     render() {
         return (
@@ -65,7 +61,6 @@ class ListItemAdd extends React.Component {
                                     <Input
                                         onChange={e => this.typeText('login', e)}
                                         value={this.state.login}
-                                        onkeyup={this.onKeyUp}
                                     />
                                 </InputGroup>
                             </Col>
@@ -79,7 +74,6 @@ class ListItemAdd extends React.Component {
                                     <Input
                                         onChange={e => this.typeText('email', e)}
                                         value={this.state.email}
-                                        onkeyup={this.onKeyUp}
                                     />
                                 </InputGroup>
                             </Col>
@@ -92,7 +86,6 @@ class ListItemAdd extends React.Component {
                                     <Input
                                         onChange={e => this.typeText('password', e)}
                                         value={this.state.password}
-                                        onkeyup={this.onKeyUp}
                                     />
                                 </InputGroup>
                             </Col>
@@ -102,7 +95,9 @@ class ListItemAdd extends React.Component {
                                     type="submit"
                                     outline
                                     color="secondary"
-                                >Добавить</Button>
+                                >
+                                    Добавить
+                                </Button>
                             </Col>
 
                         </Row>

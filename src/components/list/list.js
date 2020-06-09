@@ -13,22 +13,9 @@ class List extends React.Component {
         }
 
         this.getRecords();
-
-        this.deleteRecord = this.deleteRecord.bind(this);
-        this.addRecord = this.addRecord.bind(this);
-        this.editRecord = this.editRecord.bind(this);
     }
 
-
-    async deleteRecord(id) {
-        const result = await fetch(`${url}/${id}`, {
-            method: 'DELETE'
-        });
-        if (result.ok)
-            await this.getRecords();
-    }
-
-    async addRecord(body) {
+    addRecord = async (body) => {
         const result = await fetch(url, {
             method: 'PUT',
             body: body,
@@ -36,11 +23,13 @@ class List extends React.Component {
                 'Content-Type': 'application/json'
             }
         });
-        if (result.ok)
+        if (result.ok) {
             await this.getRecords();
+            return await result.json()
+        }
     }
 
-    async getRecords() {
+    getRecords = async () => {
         await fetch(url)
             .then(result =>
                 result.json()
@@ -49,26 +38,36 @@ class List extends React.Component {
                     records: list
                 })
             )
-        this.render();
     }
 
-    async editRecord(body, id, updateMethod) {
-        const result = await fetch(`${url}/${id}`, {
-            method: 'POST',
-            body: body,
-            headers: {
-                'Content-Type': 'application/json',
+    editRecord = (id) => {
+        return async (body, updateMethod) => {
+            const result = await fetch(`${url}/${id}`, {
+                method: 'POST',
+                body: body,
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (result.ok) {
+                const data = await result.json();
+                updateMethod(data.data)
             }
-        });
-        if (result.ok) {
-            const data = await result.json();
-            updateMethod(data.data)
         }
+    }
 
+    deleteRecord = (id) => {
+        return async () => {
+            const result = await fetch(`${url}/${id}`, {
+                method: 'DELETE'
+            });
+            if (result.ok)
+                await this.getRecords();
+        }
     }
 
 
-    showHints() {
+    showHints = () => {
         const toggle = () => {
             this.setState({
                 hintShowed: !this.state.hintShowed
@@ -101,13 +100,12 @@ class List extends React.Component {
             <div>
                 <ListGroup className="app-first">
                     {this.state.records.map(
-                        ({_id: id, data: data}, index) =>
+                        (record, index) =>
                             <ListItem
                                 key={index}
-                                id={id || '-1'}
-                                data={data || Object()}
-                                editMethod={this.editRecord}
-                                deleteMethod={() => this.deleteRecord(id)}
+                                data={record['data'] || Object()}
+                                editMethod={this.editRecord(record['_id'])}
+                                deleteMethod={this.deleteRecord(record['_id'])}
                             />
                     )}
                     <ListItemAdd

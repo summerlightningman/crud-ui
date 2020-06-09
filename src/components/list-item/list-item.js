@@ -13,10 +13,6 @@ class ListItem extends React.Component {
             data: props.data,
             editValue: Object.values(props.data).join(' / ')
         }
-
-        this.typeText = this.typeText.bind(this);
-        this.updateData = this.updateData.bind(this);
-        this.editRecord = this.editRecord.bind(this);
     }
 
     swapEditMode = () => {
@@ -29,7 +25,7 @@ class ListItem extends React.Component {
         this.props.deleteMethod();
     }
 
-    editRecord(event) {
+    editRecord = (event) => {
         event.preventDefault();
 
         const [login, email, password] = this.state.editValue.split(' / ');
@@ -42,17 +38,17 @@ class ListItem extends React.Component {
             }
         }
         const body = JSON.stringify(data);
-        this.props.editMethod(body, this.props.id, this.updateData);
+        this.props.editMethod(body, this.updateData);
         this.swapEditMode();
     }
 
-    typeText(event) {
+    typeText = (event) => {
         this.setState({
             editValue: event.target.value
         });
     }
 
-    updateData(data) {
+    updateData = (data) => {
         this.setState({
             data: data,
             editValue: Object.values(data).join(' / ')
@@ -100,8 +96,13 @@ class ListItem extends React.Component {
 
     itemView = () => {
         const text = Object.entries(this.state.data).map(
-            ([key, value]) =>
-                <><Badge color="light" pill>{key}</Badge>{value}</>
+            ([key, value], index) =>
+                <div key={index}>
+                    <Badge color="light" pill>
+                        {key}
+                    </Badge>
+                    {value}
+                </div>
         );
         return (
             <>
