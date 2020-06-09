@@ -100,9 +100,9 @@ class List extends React.Component {
             <div>
                 <ListGroup className="app-first">
                     {this.state.records.map(
-                        (record, index) =>
+                        record =>
                             <ListItem
-                                key={index}
+                                key={record['_id']}
                                 data={record['data'] || Object()}
                                 editMethod={this.editRecord(record['_id'])}
                                 deleteMethod={this.deleteRecord(record['_id'])}

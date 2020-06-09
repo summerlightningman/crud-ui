@@ -4,7 +4,6 @@ import './list-item.css'
 
 
 class ListItem extends React.Component {
-
     constructor(props) {
         super(props);
 
@@ -58,18 +57,14 @@ class ListItem extends React.Component {
     render() {
         return (
             <ListGroupItem className="app-list-item d-flex justify-content-between">
-                {
-                    this.state.editMode ?
-                        this.editForm() :
-                        this.itemView()
-                }
+                {this.state.editMode ? this.editForm() : this.itemView()}
             </ListGroupItem>
         )
     }
 
     editForm = () => {
         return (
-            <>
+            <React.Fragment>
                 <Input
                     type="text"
                     placeholder="Введите E-Mail и пароль через пробел"
@@ -83,6 +78,7 @@ class ListItem extends React.Component {
                     >
                         <i className="fa fa-level-down"> </i>
                     </button>
+
                     <button
                         className="btn-check btn-sm"
                         onClick={this.editRecord}
@@ -90,34 +86,40 @@ class ListItem extends React.Component {
                         <i className="fa fa-check"> </i>
                     </button>
                 </div>
-            </>
+            </React.Fragment>
         )
     }
 
     itemView = () => {
         const text = Object.entries(this.state.data).map(
             ([key, value], index) =>
-                <div key={index}>
+                <React.Fragment key={index}>
                     <Badge color="light" pill>
                         {key}
                     </Badge>
                     {value}
-                </div>
+                </React.Fragment>
         );
         return (
-            <>
+            <React.Fragment>
                 <span className="app-list-item-label">
                     {text}
                 </span>
                 <div className="d-flex justify-content-center align-items-center">
-                    <button className="btn-edit btn-sm" onClick={this.swapEditMode}>
+                    <button
+                        className="btn-edit btn-sm"
+                        onClick={this.swapEditMode}
+                    >
                         <i className="fa fa-edit"> </i>
                     </button>
-                    <button className="btn-trash btn-sm" onClick={this.deleteRecord}>
+                    <button
+                        className="btn-trash btn-sm"
+                        onClick={this.deleteRecord}
+                    >
                         <i className="fa fa-trash-o"> </i>
                     </button>
                 </div>
-            </>
+            </React.Fragment>
         )
     }
 }
