@@ -10,8 +10,15 @@ class ListItem extends React.Component {
         this.state = {
             editMode: false,
             data: props.data,
-            editValue: Object.values(props.data).join(' / ')
+            editData: props.data
         }
+    }
+
+    updateComponent = (data) => {
+        this.setState({
+            data: data,
+            editValue: Object.values(data).join(' / ')
+        })
     }
 
     swapEditMode = () => {
@@ -20,38 +27,19 @@ class ListItem extends React.Component {
         }));
     }
 
-    deleteRecord = () => {
-        this.props.deleteMethod();
-    }
-
     editRecord = (event) => {
         event.preventDefault();
 
-        const [login, email, password] = this.state.editValue.split(' / ');
-
         const data = {
-            data: {
-                login,
-                email,
-                password
-            }
+            data: this.state.editData
         }
-        // const body = JSON.stringify(data);
-        this.props.editMethod(data, this.updateData);
+
+        this.props.editMethod(data, this.updateComponent);
         this.swapEditMode();
     }
 
-    typeText = (event) => {
-        this.setState({
-            editValue: event.target.value
-        });
-    }
-
-    updateData = (data) => {
-        this.setState({
-            data: data,
-            editValue: Object.values(data).join(' / ')
-        })
+    deleteRecord = () => {
+        this.props.deleteMethod();
     }
 
     render() {
@@ -63,14 +51,23 @@ class ListItem extends React.Component {
     }
 
     editForm = () => {
+        const inputs = Object.entries(this.state.data).map(
+            ([key, value], index) =>
+                <div key={index}>
+                    <Badge color="light" pill>
+                        {key}
+                    </Badge>
+                    <Input
+                        type="text"
+                        placeholder={`Введите поле ${key}`}
+                        onChange={this.typeText(key)}
+                        value={this.state.editData[key]}
+                    />
+                </div>
+        );
         return (
             <React.Fragment>
-                <Input
-                    type="text"
-                    placeholder="Введите E-Mail и пароль через пробел"
-                    onChange={this.typeText}
-                    value={this.state.editValue}
-                />
+                {inputs}
                 <div className="d-flex justify-content-center align-items-center">
                     <button
                         className="btn-level-down btn-sm"
@@ -121,6 +118,16 @@ class ListItem extends React.Component {
                 </div>
             </React.Fragment>
         )
+    }
+
+    typeText = (key) => {
+        return (event) => {
+            const field = {[key]: event.target.value}
+            this.setState(state => ({
+                editData: Object.assign(state.editData, field)
+            }));
+        }
+
     }
 }
 

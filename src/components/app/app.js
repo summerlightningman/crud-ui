@@ -10,7 +10,7 @@ const App = () => {
     }
     return (
         <div className="app">
-            <List key={-1}/>
+            <List/>
             <div style={spaceFooter}> </div>
         </div>
     );

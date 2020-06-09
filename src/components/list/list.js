@@ -74,7 +74,7 @@ class List extends React.Component {
             })
         }
         return (
-            <div>
+            <React.Fragment>
                 <Button
                     color="primary"
                     outline
@@ -91,13 +91,13 @@ class List extends React.Component {
                         </CardBody>
                     </Card>
                 </Collapse>
-            </div>
+            </React.Fragment>
         )
     }
 
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <ListGroup className="app-first">
                     {this.state.records.map(
                         record =>
@@ -110,13 +110,11 @@ class List extends React.Component {
                     )}
                     <ListItemAdd
                         addMethod={this.addRecord}
-                        key={-1}
                     />
                 </ListGroup>
                 <hr/>
                 {this.showHints()}
-            </div>
-
+            </React.Fragment>
         )
     }
 }
